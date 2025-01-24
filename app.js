@@ -1,0 +1,26 @@
+require("dotenv").config();
+
+const express = require("express");
+const path = require("node:path");
+
+// Initialize app
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Path to public folder
+const assetsPath = path.join(__dirname, "/public");
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.static(assetsPath));
+
+// Routers
+const indexRouter = require("./routes/indexRouter");
+const mapRouter = require("./routes/mapRouter");
+const leaderboardRouter = require("./routes/leaderboardRouter");
+
+app.use("/", indexRouter);
+app.use("/map", mapRouter);
+app.use("/leaderboard", leaderboardRouter);
+
+app.listen(process.env.PORT, () => console.log("App running on port", PORT));
