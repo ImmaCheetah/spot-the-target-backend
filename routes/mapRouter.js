@@ -10,4 +10,6 @@ mapRouter.get('/', function(req,res,next) {
 
 mapRouter.get('/:mapId/target/:targetId', mapController.getTarget)
 
+mapRouter.post('/:mapId/target/:targetId', mapController.verifyTarget)
+
 module.exports = mapRouter;
