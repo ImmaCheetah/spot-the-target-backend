@@ -1,4 +1,5 @@
 const db = require("../db/queries");
+const {isInRange } = require("../helper/isInRange");
 
 
 async function getTarget(req, res, next) {
@@ -22,6 +23,7 @@ async function getTarget(req, res, next) {
 async function verifyTarget(req, res, next) {
   const {mapId, targetId} = req.params;
   const {x, y, id} = req.body;
+  console.log('User Coords', x, y)
 
   const target = await db.getTarget(id);
 
@@ -32,7 +34,7 @@ async function verifyTarget(req, res, next) {
     });
   }
 
-  if (target.coordinates.x === x && target.coordinates.y === y) {
+  if (isInRange(x, y, target.coordinates.x, target.coordinates.y)) {
     const foundTarget = await db.setIsFound(id);
 
     res.json({
