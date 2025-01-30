@@ -1,5 +1,15 @@
 const prisma = require("./prisma");
 
+async function getMap(mapId) {
+  const map = await prisma.map.findUnique({
+    where: {
+      id: mapId
+    }
+  })
+
+  return map;
+}
+
 async function getTarget(targetId) {
   const target = await prisma.target.findUnique({
     where: {
@@ -24,6 +34,7 @@ async function setIsFound(targetId) {
 }
 
 module.exports = {
+  getMap,
   getTarget,
-  setIsFound
+  setIsFound,
 }

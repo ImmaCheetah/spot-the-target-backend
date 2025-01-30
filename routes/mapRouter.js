@@ -8,6 +8,7 @@ mapRouter.get('/', function(req,res,next) {
   })
 })
 
+mapRouter.get('/:mapId', mapController.getMap)
 mapRouter.get('/:mapId/target/:targetId', mapController.getTarget)
 
 mapRouter.post('/:mapId/target/:targetId', mapController.verifyTarget)

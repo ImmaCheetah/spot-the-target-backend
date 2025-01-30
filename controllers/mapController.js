@@ -2,6 +2,23 @@ const db = require("../db/queries");
 const {isInRange } = require("../helper/isInRange");
 
 
+async function getMap(req, res, next) {
+  const {mapId} = req.params;
+  const map = await db.getMap(mapId);
+
+  if (!map) {
+    // next(new CustomError("Not Found", "Failed to get map", 404));
+    res.status(404).json({
+      errorMsg: "Could not find map",
+    });
+  } else {
+    res.json({
+      success: true,
+      map: map,
+    });
+  }
+}
+
 async function getTarget(req, res, next) {
   const {mapId, targetId} = req.params;
   console.log(targetId);
@@ -52,6 +69,7 @@ async function verifyTarget(req, res, next) {
 }
 
 module.exports = {
+  getMap,
   getTarget,
   verifyTarget
 }
