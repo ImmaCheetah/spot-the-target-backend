@@ -57,7 +57,8 @@ async function verifyTarget(req, res, next) {
     res.json({
       success: true,
       message: 'target found',
-      isFound: foundTarget.isFound
+      isFound: foundTarget.isFound,
+      coordinates: foundTarget.coordinates
     })
   } else {
     res.json({

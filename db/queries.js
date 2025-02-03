@@ -4,6 +4,9 @@ async function getMap(mapId) {
   const map = await prisma.map.findUnique({
     where: {
       id: mapId
+    },
+    include: {
+      targets: true
     }
   })
 
