@@ -52,19 +52,17 @@ async function verifyTarget(req, res, next) {
   }
 
   if (isInRange(x, y, target.coordinates.x, target.coordinates.y)) {
-    const foundTarget = await db.setIsFound(id);
-
-    res.json({
+      res.json({
       success: true,
       message: 'target found',
-      isFound: foundTarget.isFound,
-      coordinates: foundTarget.coordinates
+      isFound: true,
+      coordinates: target.coordinates,
     })
   } else {
     res.json({
       success: true,
       message: 'missed',
-      isFound: target.isFound
+      isFound: false
     })
   }
 }
