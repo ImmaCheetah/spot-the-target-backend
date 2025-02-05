@@ -13,4 +13,6 @@ mapRouter.get('/:mapId/target/:targetId', mapController.getTarget)
 
 mapRouter.post('/:mapId/target/:targetId', mapController.verifyTarget)
 
+mapRouter.post('/:mapId', mapController.recordStartTime)
+
 module.exports = mapRouter;

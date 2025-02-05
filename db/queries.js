@@ -23,8 +23,24 @@ async function getTarget(targetId) {
   return target;
 }
 
+async function setStartTime(mapId, timestamp) {
+  const startTime = await prisma.score.create({
+    data: {
+      startTime: timestamp,
+      map: {
+        connect: {
+          id: mapId
+        }
+      }
+    },
+
+  })
+
+  return startTime;
+}
 
 module.exports = {
   getMap,
   getTarget,
+  setStartTime
 }

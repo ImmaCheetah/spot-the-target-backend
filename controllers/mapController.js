@@ -67,10 +67,25 @@ async function verifyTarget(req, res, next) {
   }
 }
 
+async function recordStartTime(req, res, next) {
+  const {mapId} = req.params;
+
+  const currentTime = new Date();
+  console.log(currentTime)
+  const startTime = await db.setStartTime(mapId, currentTime);
+
+  res.json({
+    message: "start time set",
+    startTime: startTime
+  })
+  
+}
+
 module.exports = {
   getMap,
   getTarget,
-  verifyTarget
+  verifyTarget,
+  recordStartTime
 }
 
 /*
