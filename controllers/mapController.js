@@ -70,7 +70,7 @@ async function verifyTarget(req, res, next) {
 async function recordStartTime(req, res, next) {
   const {mapId} = req.params;
 
-  const currentTime = new Date();
+  const currentTime = Date.now();
   console.log(currentTime)
   const startTime = await db.setStartTime(mapId, currentTime);
 
@@ -87,11 +87,3 @@ module.exports = {
   verifyTarget,
   recordStartTime
 }
-
-/*
-- User clicks at X and Y with selected target
-- Request gets sent with X,Y and the selected target
-- Backend checks if the targets X,Y match the user's
-
-
-*/

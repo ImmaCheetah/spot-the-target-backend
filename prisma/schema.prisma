@@ -31,8 +31,8 @@ model Target {
 model Score {
   id        String   @id @default(uuid())
   username  String   @default("Anonymous")
-  startTime DateTime
-  finalTime String? 
+  startTime Float
+  finalTime Float? 
   map       Map      @relation(fields: [mapId], references: [id])
   mapId     String
 }

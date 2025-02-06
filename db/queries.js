@@ -23,6 +23,19 @@ async function getTarget(targetId) {
   return target;
 }
 
+async function getStartTime(scoreId) {
+  const startTime = await prisma.score.findUnique({
+    where: {
+      id: scoreId
+    },
+    select: {
+      startTime: true
+    }
+  })
+
+  return startTime;
+}
+
 async function setStartTime(mapId, timestamp) {
   const startTime = await prisma.score.create({
     data: {
@@ -33,14 +46,29 @@ async function setStartTime(mapId, timestamp) {
         }
       }
     },
-
   })
 
   return startTime;
 }
 
+async function submitScore(scoreId, username, finalTime) {
+  const finalScore = await prisma.score.update({
+    where: {
+      id: scoreId
+    },
+    data: {
+      username: username,
+      finalTime: finalTime,
+    },
+  })
+
+  return finalScore;
+}
+
 module.exports = {
   getMap,
   getTarget,
-  setStartTime
+  getStartTime,
+  setStartTime,
+  submitScore
 }
