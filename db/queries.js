@@ -65,10 +65,25 @@ async function submitScore(scoreId, username, finalTime) {
   return finalScore;
 }
 
+async function getMapLeaderboard(mapId) {
+  const leaderboard = await prisma.score.findMany({
+    where: {
+      mapId: mapId
+    },
+    select: {
+      username: true,
+      finalTime: true
+    }
+  })
+
+  return leaderboard;
+}
+
 module.exports = {
   getMap,
   getTarget,
   getStartTime,
   setStartTime,
-  submitScore
+  submitScore,
+  getMapLeaderboard
 }

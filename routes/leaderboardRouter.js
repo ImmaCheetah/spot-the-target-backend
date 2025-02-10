@@ -2,6 +2,8 @@ const { Router } = require("express");
 const leaderboardRouter = Router();
 const leaderboardController = require("../controllers/leaderboardController");
 
+
+leaderboardRouter.get('/map/:mapId', leaderboardController.getLeaderboard)
 leaderboardRouter.get('/:scoreId', leaderboardController.getStartTime)
 
 leaderboardRouter.patch('/:scoreId', leaderboardController.submitScore)

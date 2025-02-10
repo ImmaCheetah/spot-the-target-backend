@@ -36,7 +36,25 @@ async function getStartTime(req, res, next) {
   }
 }
 
+async function getLeaderboard(req, res, next) {
+  const {mapId} = req.params;
+  const leaderboard = await db.getMapLeaderboard(mapId);
+
+  if (!leaderboard) {
+    // next(new CustomError("Not Found", "Failed to get map", 404));
+    res.status(404).json({
+      errorMsg: "Could not get leaderboard",
+    });
+  } else {
+    res.json({
+      success: true,
+      leaderboard,
+    });
+  }
+}
+
 module.exports = {
   submitScore,
-  getStartTime
+  getStartTime,
+  getLeaderboard
 }
