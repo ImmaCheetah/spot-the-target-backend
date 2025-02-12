@@ -76,6 +76,9 @@ async function getMapLeaderboard(mapId) {
     select: {
       username: true,
       finalTime: true
+    },
+    orderBy: {
+      finalTime: 'asc'
     }
   })
 
