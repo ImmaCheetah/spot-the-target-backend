@@ -1,5 +1,7 @@
 const db = require("../db/queries");
 const { body, validationResult } = require("express-validator");
+const CustomError = require("../helper/CustomError");
+const asyncHandler = require("express-async-handler");
 
 const alphaErr = "must contain only letters and numbers";
 const lengthErr = "must contain between 1 and 15 characters";
@@ -13,7 +15,7 @@ const validateUsername = [
     .withMessage(`Username ${lengthErr}`)
 ];
 
-async function submitScore(req, res, next) {
+const submitScore = asyncHandler(async (req, res, next) => {
   const {scoreId} = req.params;
   const {name, finishedTime} = req.body;
   const errors = validationResult(req);
@@ -27,52 +29,44 @@ async function submitScore(req, res, next) {
   const finalScore = await db.submitScore(scoreId, name, finishedTime);
 
   if (!finalScore) {
-    // next(new CustomError("Not Found", "Failed to get map", 404));
-    res.status(404).json({
-      errorMsg: "Could not submit score",
-    });
+    next(new CustomError("Not Found", "Failed to submit score", 404));
   } else {
     res.json({
       success: true,
-      message: "score submitted",
+      message: "Score submitted",
       finalScore: finalScore
     });
   }
-}
+})
 
-async function getStartTime(req, res, next) {
+
+const getStartTime = asyncHandler(async (req, res, next) => {
   const {scoreId} = req.params;
   const startTime = await db.getStartTime(scoreId);
 
   if (!startTime) {
-    // next(new CustomError("Not Found", "Failed to get map", 404));
-    res.status(404).json({
-      errorMsg: "Could not get time",
-    });
+    next(new CustomError("Not Found", "Failed to retrieve data", 404));
   } else {
     res.json({
       success: true,
       startTime,
     });
   }
-}
+})
 
-async function getLeaderboard(req, res, next) {
+const getLeaderboard = asyncHandler(async (req, res, next) => {
   const {mapId} = req.params;
   const leaderboard = await db.getMapLeaderboard(mapId);
 
   if (!leaderboard) {
-    // next(new CustomError("Not Found", "Failed to get map", 404));
-    res.status(404).json({
-      errorMsg: "Could not get leaderboard",
-    });
+    next(new CustomError("Not Found", "Failed to get leaderboard", 404));
   } else {
     res.json({
       success: true,
       leaderboard,
     });
   }
-}
+})
 
 module.exports = {
   submitScore,

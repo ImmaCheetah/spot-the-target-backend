@@ -3,7 +3,6 @@ const {isInRange } = require("../helper/isInRange");
 const CustomError = require("../helper/CustomError");
 const asyncHandler = require("express-async-handler");
 
-
 const getMap = asyncHandler(async (req, res, next) => {
   const {mapId} = req.params;
   const map = await db.getMap(mapId);
@@ -18,9 +17,7 @@ const getMap = asyncHandler(async (req, res, next) => {
   }
 })
 
-
 const verifyTarget = asyncHandler(async (req, res, next) => {
-  const {mapId, targetId} = req.params;
   const {x, y, id} = req.body;
   console.log('User Coords', x, y)
 
