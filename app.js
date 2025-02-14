@@ -25,4 +25,14 @@ app.use("/", indexRouter);
 app.use("/map", mapRouter);
 app.use("/leaderboard", leaderboardRouter);
 
+app.use((err, req, res, next) => {
+  console.error("APP ERROR", err);
+
+  res.status(err.statusCode || 500).json({
+    name: err.name,
+    errorMsg: err.message,
+    status: err.statusCode,
+  });
+});
+
 app.listen(process.env.PORT, () => console.log("App running on port", PORT));
