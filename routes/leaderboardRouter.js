@@ -6,8 +6,10 @@ const leaderboardController = require("../controllers/leaderboardController");
 leaderboardRouter.get('/map/:mapId', leaderboardController.getLeaderboard)
 leaderboardRouter.get('/:scoreId', leaderboardController.getStartTime)
 
-leaderboardRouter.patch('/:scoreId', leaderboardController.submitScore)
+// Submit score by updating final time
+leaderboardRouter.patch('/:scoreId', leaderboardController.validateUsername, leaderboardController.submitScore)
 
+// Create initial time
 leaderboardRouter.post('/:mapId', leaderboardController.submitScore)
 
 module.exports = leaderboardRouter;
