@@ -13,6 +13,12 @@ async function getMap(mapId) {
   return map;
 }
 
+async function getMaps() {
+  const map = await prisma.map.findMany()
+
+  return map;
+}
+
 async function getTarget(targetId) {
   const target = await prisma.target.findUnique({
     where: {
@@ -87,6 +93,7 @@ async function getMapLeaderboard(mapId) {
 
 module.exports = {
   getMap,
+  getMaps,
   getTarget,
   getStartTime,
   setStartTime,
