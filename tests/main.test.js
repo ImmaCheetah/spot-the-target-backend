@@ -2,12 +2,13 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const indexRouter = require('../routes/indexRouter');
 const mapRouter = require('../routes/mapRouter');
+const leaderboardRouter = require('../routes/leaderboardRouter');
 const request = require("supertest");
 const express = require("express");
 const app = express();
 
 
-beforeAll( async() => {
+beforeEach( async() => {
   const maps = await prisma.map.createMany({
     data: [
       {
@@ -50,16 +51,19 @@ beforeAll( async() => {
   })
 })
 
-afterAll(async () => {
+afterEach(async () => {
   await prisma.target.deleteMany()
   await prisma.score.deleteMany()
   await prisma.map.deleteMany()
+  await app.close()
+  await prisma.$disconnect()
 })
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/", indexRouter);
 app.use('/map', mapRouter);
+app.use('/leaderboard', leaderboardRouter);
 
 
 test("index route works", async () => {
@@ -108,5 +112,16 @@ describe("Map routes", () => {
     .post("/map/1")
 
     expect(Date.now() - response.body.startTime.startTime).toBeLessThan(10)
+  })
+})
+
+
+describe("Leaderboard routes", () => {
+  test("returns status 200 when getting leaderboard", async () => {
+    const response = await request(app)
+    .get("leaderboard/map/2")
+
+    expect(response.statusCode).toEqual(200)
+    // expect(response.body.map.name).toEqual('Prehistoric')
   })
 })
