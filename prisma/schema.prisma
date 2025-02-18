@@ -24,7 +24,7 @@ model Target {
   id          String @id @default(uuid())
   name        String
   coordinates Json
-  map         Map    @relation(fields: [mapId], references: [id])
+  map         Map    @relation(fields: [mapId], references: [id], onDelete: Cascade)
   mapId       String
 }
 
@@ -33,6 +33,6 @@ model Score {
   username  String   @default("Anonymous")
   startTime Float
   finalTime Float? 
-  map       Map      @relation(fields: [mapId], references: [id])
+  map       Map      @relation(fields: [mapId], references: [id], onDelete: Cascade)
   mapId     String
 }
