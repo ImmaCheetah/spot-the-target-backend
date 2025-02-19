@@ -20,7 +20,6 @@ const getMap = asyncHandler(async (req, res, next) => {
 
 const verifyTarget = asyncHandler(async (req, res, next) => {
   const {x, y, id} = req.body;
-  console.log('User Coords', x, y)
 
   const target = await db.getTarget(id);
 
@@ -49,7 +48,6 @@ const recordStartTime = asyncHandler(async (req, res, next) => {
   const {mapId} = req.params;
 
   const currentTime = Date.now();
-  console.log(currentTime)
   const startTime = await db.setStartTime(mapId, currentTime);
 
   res.json({

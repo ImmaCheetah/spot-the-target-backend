@@ -9,7 +9,4 @@ leaderboardRouter.get('/:scoreId', leaderboardController.getStartTime)
 // Submit score by updating final time
 leaderboardRouter.patch('/:scoreId', leaderboardController.validateUsername, leaderboardController.submitScore)
 
-// Create initial time
-leaderboardRouter.post('/:mapId', leaderboardController.submitScore)
-
 module.exports = leaderboardRouter;

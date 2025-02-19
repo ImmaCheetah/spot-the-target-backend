@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const db = require("../db/queries")
 const indexRouter = require('../routes/indexRouter');
 const mapRouter = require('../routes/mapRouter');
 const leaderboardRouter = require('../routes/leaderboardRouter');
@@ -7,8 +8,13 @@ const request = require("supertest");
 const express = require("express");
 const app = express();
 
+// const {getStartTime} = require('../controllers/leaderboardController')
+// leaderboardRouter.get('/:scoreId', getStartTime)
+// jest.mock('../db/queries', () => ({
+//   getStartTime: jest.fn(), 
+// }));
 
-beforeEach( async() => {
+beforeAll( async() => {
   const maps = await prisma.map.createMany({
     data: [
       {
@@ -51,12 +57,10 @@ beforeEach( async() => {
   })
 })
 
-afterEach(async () => {
+afterAll(async () => {
   await prisma.target.deleteMany()
   await prisma.score.deleteMany()
   await prisma.map.deleteMany()
-  await app.close()
-  await prisma.$disconnect()
 })
 
 app.use(express.urlencoded({ extended: false }));
@@ -64,7 +68,6 @@ app.use(express.json());
 app.use("/", indexRouter);
 app.use('/map', mapRouter);
 app.use('/leaderboard', leaderboardRouter);
-
 
 test("index route works", async () => {
   const response = await request(app)
@@ -119,9 +122,74 @@ describe("Map routes", () => {
 describe("Leaderboard routes", () => {
   test("returns status 200 when getting leaderboard", async () => {
     const response = await request(app)
-    .get("leaderboard/map/2")
+    .get("/leaderboard/map/2")
 
     expect(response.statusCode).toEqual(200)
-    // expect(response.body.map.name).toEqual('Prehistoric')
+  })
+
+  test("returns correct start time", async () => {
+    const startId = await prisma.score.create({
+      data: {
+        startTime: 1739977350361,
+        mapId: '1'
+      },
+      select: {
+        id: true
+      }
+    })
+
+    const response = await request(app)
+    .get(`/leaderboard/${startId.id}`)
+
+    expect(response.statusCode).toEqual(200)
+    expect(response.body.startTime.startTime).toEqual(1739977350361)
+  })
+
+  test("returns 404 status if wrong route", async () => {   
+    const response = await request(app)
+    .get(`/leaderboard/wrong`)
+
+    expect(response.statusCode).toEqual(404)
+  })
+
+  test("successfully records final time and name", async () => {
+    const startId = await prisma.score.create({
+      data: {
+        startTime: Date.now(),
+        mapId: '1'
+      },
+      select: {
+        id: true
+      }
+    })
+
+    
+    const response = await request(app)
+    .patch(`/leaderboard/${startId.id}`)
+    .send({name: 'Dave', finishedTime: 1739977354000})
+
+    expect(response.statusCode).toEqual(200)
+    expect(response.body.finalScore.username).toEqual('Dave')
+    expect(response.body.finalScore.finalTime).toEqual(1739977354000)
+  })
+
+  test("throws error with invalid name", async () => {
+    const startId = await prisma.score.create({
+      data: {
+        startTime: Date.now(),
+        mapId: '1'
+      },
+      select: {
+        id: true
+      }
+    })
+
+    
+    const response = await request(app)
+    .patch(`/leaderboard/${startId.id}`)
+    .send({name: '%$!', finishedTime: 1739977354000})
+
+    expect(response.statusCode).toEqual(400)
+    expect(response.body.errors[0].msg).toEqual('Username must contain only letters and numbers')
   })
 })
