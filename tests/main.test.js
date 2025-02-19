@@ -1,18 +1,11 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const db = require("../db/queries")
 const indexRouter = require('../routes/indexRouter');
 const mapRouter = require('../routes/mapRouter');
 const leaderboardRouter = require('../routes/leaderboardRouter');
 const request = require("supertest");
 const express = require("express");
 const app = express();
-
-// const {getStartTime} = require('../controllers/leaderboardController')
-// leaderboardRouter.get('/:scoreId', getStartTime)
-// jest.mock('../db/queries', () => ({
-//   getStartTime: jest.fn(), 
-// }));
 
 beforeAll( async() => {
   const maps = await prisma.map.createMany({
@@ -184,7 +177,6 @@ describe("Leaderboard routes", () => {
       }
     })
 
-    
     const response = await request(app)
     .patch(`/leaderboard/${startId.id}`)
     .send({name: '%$!', finishedTime: 1739977354000})
