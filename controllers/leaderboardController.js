@@ -12,12 +12,12 @@ const validateUsername = [
     .matches(/^[A-Za-z0-9]+$/)
     .withMessage(`Username ${alphaErr}`)
     .isLength({ min: 1, max: 15 })
-    .withMessage(`Username ${lengthErr}`)
+    .withMessage(`Username ${lengthErr}`),
 ];
 
 const submitScore = asyncHandler(async (req, res, next) => {
-  const {scoreId} = req.params;
-  const {name, finishedTime} = req.body;
+  const { scoreId } = req.params;
+  const { name, finishedTime } = req.body;
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -34,14 +34,13 @@ const submitScore = asyncHandler(async (req, res, next) => {
     res.json({
       success: true,
       message: "Score submitted",
-      finalScore: finalScore
+      finalScore: finalScore,
     });
   }
-})
-
+});
 
 const getStartTime = asyncHandler(async (req, res, next) => {
-  const {scoreId} = req.params;
+  const { scoreId } = req.params;
   const startTime = await db.getStartTime(scoreId);
 
   if (!startTime) {
@@ -52,10 +51,10 @@ const getStartTime = asyncHandler(async (req, res, next) => {
       startTime,
     });
   }
-})
+});
 
 const getLeaderboard = asyncHandler(async (req, res, next) => {
-  const {mapId} = req.params;
+  const { mapId } = req.params;
   const leaderboard = await db.getMapLeaderboard(mapId);
 
   if (!leaderboard) {
@@ -66,11 +65,11 @@ const getLeaderboard = asyncHandler(async (req, res, next) => {
       leaderboard,
     });
   }
-})
+});
 
 module.exports = {
   submitScore,
   getStartTime,
   getLeaderboard,
-  validateUsername
-}
+  validateUsername,
+};

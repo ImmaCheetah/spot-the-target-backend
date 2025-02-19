@@ -3,12 +3,12 @@ const db = require("../db/queries");
 
 function getHomePage(req, res, next) {
   res.json({
-    title: 'Home Page',
+    title: "Home Page",
     status: 200,
-    message: 'success'
-  })
+    message: "success",
+  });
 }
 
 module.exports = {
   getHomePage,
-}
+};

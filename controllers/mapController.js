@@ -1,10 +1,10 @@
 const db = require("../db/queries");
-const {isInRange } = require("../helper/isInRange");
+const { isInRange } = require("../helper/isInRange");
 const CustomError = require("../helper/CustomError");
 const asyncHandler = require("express-async-handler");
 
 const getMap = asyncHandler(async (req, res, next) => {
-  const {mapId} = req.params;
+  const { mapId } = req.params;
   const map = await db.getMap(mapId);
   // const maps = await db.getMaps();
 
@@ -16,10 +16,10 @@ const getMap = asyncHandler(async (req, res, next) => {
       map: map,
     });
   }
-})
+});
 
 const verifyTarget = asyncHandler(async (req, res, next) => {
-  const {x, y, id} = req.body;
+  const { x, y, id } = req.body;
 
   const target = await db.getTarget(id);
 
@@ -28,36 +28,35 @@ const verifyTarget = asyncHandler(async (req, res, next) => {
   }
 
   if (isInRange(x, y, target.coordinates.x, target.coordinates.y)) {
-      res.json({
+    res.json({
       success: true,
-      message: 'Target found',
+      message: "Target found",
       isFound: true,
       coordinates: target.coordinates,
-    })
+    });
   } else {
     res.json({
       success: true,
-      message: 'Missed',
-      isFound: false
-    })
+      message: "Missed",
+      isFound: false,
+    });
   }
-})
-
+});
 
 const recordStartTime = asyncHandler(async (req, res, next) => {
-  const {mapId} = req.params;
+  const { mapId } = req.params;
 
   const currentTime = Date.now();
   const startTime = await db.setStartTime(mapId, currentTime);
 
   res.json({
     message: "Start time set",
-    startTime: startTime
-  })
-})
+    startTime: startTime,
+  });
+});
 
 module.exports = {
   getMap,
   verifyTarget,
-  recordStartTime
-}
+  recordStartTime,
+};
