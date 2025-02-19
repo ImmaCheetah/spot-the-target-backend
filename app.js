@@ -18,6 +18,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
+app.set('trust proxy', true)
 app.use(function (req, res, next) {
 
   // Website you wish to allow to connect
