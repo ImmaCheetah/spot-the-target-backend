@@ -6,7 +6,6 @@ const asyncHandler = require("express-async-handler");
 const getMap = asyncHandler(async (req, res, next) => {
   const { mapId } = req.params;
   const map = await db.getMap(mapId);
-  // const maps = await db.getMaps();
 
   if (!map) {
     next(new CustomError("Not Found", "Failed to get map", 404));
