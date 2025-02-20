@@ -30,7 +30,7 @@ You can check out the client here out here: https://github.com/ImmaCheetah/spot-
 
 |  `GET`  |  `/api/leaderboard/map/:mapId`  | Retrieve leaderboard of selected map |
 
-|  `GET`  |  `/api/leaderboard/:scoreid`  | Retrieve initial time from user's score to calculate total time |
+|  `GET`  |  `/api/leaderboard/:scoreId`  | Retrieve initial time from user's score to calculate total time |
 
 |  `PATCH`  |  `/api/leaderboard/:scoreId`  | Update user's final game time |
 
